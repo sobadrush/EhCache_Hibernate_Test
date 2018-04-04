@@ -7,15 +7,21 @@ import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -24,12 +30,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = "classpath:spring-beans.xml")
 public class TestConnectionC3P0 {
 
-	private int testNumber = 0;
+	private static int testNumber = 0;
 
-//	@Resource(name = "driverManagerDatasource")
 	@Resource(name = "c3p0DataSource")
 	private DataSource dataSource;
 
+	@Autowired
+	private SessionFactory sessionFactory;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -40,7 +48,10 @@ public class TestConnectionC3P0 {
 
 	@Before
 	public void setUp() throws Exception {
-		this.testNumber++;
+		testNumber++;
+		System.err.println("===========================================");
+		System.err.println("================= test_" + testNumber + " ==================");
+		System.err.println("===========================================");
 	}
 
 	@After
@@ -48,8 +59,8 @@ public class TestConnectionC3P0 {
 	}
 
 	@Test
+	@Ignore
 	public void test_001() throws SQLException {
-		System.out.println("================= test_" + this.testNumber + "==================");
 		System.out.println("dataSource = " + dataSource);
 		String databaseProductName = dataSource.getConnection().getMetaData().getDatabaseProductName();
 		System.out.println("databaseProductName >>> " + databaseProductName);
@@ -64,4 +75,24 @@ public class TestConnectionC3P0 {
 		System.out.println("----------------------------------------");
 	}
 
+	@Test
+	@Ignore
+	@Transactional
+	public void test_002() {
+		System.out.println("sessionFactory = " + sessionFactory);
+		Session currentSession = sessionFactory.getCurrentSession();
+		System.out.println("currentSession = " + currentSession);
+	}
+	
+	@Test
+//	@Rollback(value = false) // 預設都會Rollback
+	@Transactional
+	public void test_003() {
+		System.out.println("=-=-=-=-=-=-=-=-=-=-=-= 測試rollback =-=-=-=-=-=-=-=-=-=-=-=-=");
+		Session currentSession = sessionFactory.getCurrentSession();
+		NativeQuery query = currentSession.createNativeQuery("DELETE FROM z40180_deptTB WHERE deptno IN ( 10 , 20 ) ");
+		query.executeUpdate();
+	}
 }
+
+

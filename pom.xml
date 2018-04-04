@@ -14,6 +14,8 @@
         <hibrenate-version>5.2.13.Final</hibrenate-version>
         <spring-version>5.0.4.RELEASE</spring-version>
         <sqlite-version>3.8.11.2</sqlite-version>
+        <sqlite-dialect-ver>1.0</sqlite-dialect-ver>
+        <log4j-version>1.2.17</log4j-version>
     </properties>
 
     <dependencies>
@@ -90,13 +92,6 @@
 		    <version>${hibrenate-version}</version>
 		</dependency>
         
-		<!-- MSSQL-JDBC -->
-<!-- 		<dependency> -->
-<!-- 		    <groupId>com.microsoft.sqlserver</groupId> -->
-<!-- 		    <artifactId>mssql-jdbc</artifactId> -->
-<!-- 		    <version>6.2.2.jre8</version> -->
-<!-- 		</dependency> -->
-        
         <!-- SQLITE-JDBC -->
 		<dependency>
 		    <groupId>org.xerial</groupId>
@@ -104,20 +99,19 @@
 		    <version>${sqlite-version}</version>
 		</dependency>
         
-        <!-- COMMONS-LANG3 -->
-<!-- 		<dependency> -->
-<!-- 		    <groupId>org.apache.commons</groupId> -->
-<!-- 		    <artifactId>commons-lang3</artifactId> -->
-<!-- 		    <version>3.4</version> -->
-<!-- 		</dependency> -->
+		<!-- SQLITE-DIALECT -->
+		<dependency>
+		    <groupId>com.zsoltfabok</groupId>
+		    <artifactId>sqlite-dialect</artifactId>
+		    <version>${sqlite-dialect-ver}</version>
+		</dependency>
         
         <!-- LOG4J -->
 		<dependency>
 		    <groupId>log4j</groupId>
 		    <artifactId>log4j</artifactId>
-		    <version>1.2.17</version>
+		    <version>${log4j-version}</version>
 		</dependency>
-        
         
     </dependencies>
     <build>

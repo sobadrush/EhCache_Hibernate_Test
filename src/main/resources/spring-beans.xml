@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- 【C3P0q配置：http://happyqing.iteye.com/blog/2365459】 -->
 	<!-- 【C3P0q配置：http://www.yeolar.com/note/2011/10/27/spring-c3p0/】 -->
@@ -37,29 +41,43 @@
 		<property name="acquireIncrement" value="3" />
 		<!-- 每60秒检查所有连接池中的空闲连接 Default: 0 -->
 		<property name="idleConnectionTestPeriod" value="60" />
-		<!-- 因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable等方法来提升连接测试的性能 
-			Default: false -->
+		<!-- 因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable等方法来提升连接测试的性能 Default: false -->
 		<property name="testConnectionOnCheckout" value="false" />
 
-		<!--定义所有连接测试都执行的测试语句。在使用连接测试的情况下这个一显著提高测试速度。注意： 测试的表必须在初始数据源的时候就存在。Default: 
-			null -->
-		<!-- <property name="preferredTestQuery" value="SELECT count(1) FROM z40180_deptTB" 
-			/> -->
+		<!--定义所有连接测试都执行的测试语句。在使用连接测试的情况下这个一显著提高测试速度。注意： 测试的表必须在初始数据源的时候就存在。Default: null -->
+		<!-- <property name="preferredTestQuery" value="SELECT count(1) FROM z40180_deptTB"/> -->
 	</bean>
 
-	<bean id="driverManagerDatasource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		scope="singleton" p:driverClassName="org.sqlite.JDBC"
-		p:url="jdbc:sqlite:#{systemProperties['user.dir']}/mySqlLiteDB.db" />
 
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" scope="singleton">
+		<property name="dataSource" ref="c3p0DataSource"/>
+<!-- 		<property name="packagesToScan" value=""/> -->
+		<property name="hibernateProperties">
+			<props>  
+	            <prop key="hibernate.dialect">org.hibernate.dialect.SQLiteDialect</prop>  
+	            <prop key="hibernate.show_sql">true</prop>  
+	            <prop key="hibernate.format_sql">true</prop>  
+	            <prop key="hibernate.use_sql_comments">true</prop>  
+	            <prop key="hibernate.cache.use_second_level_cache">false</prop>
+	        </props>  
+		</property>
+	</bean>
+		
+		
+	<bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager" scope="singleton" 
+		p:sessionFactory-ref="sessionFactory" 
+	/> 
+		
+	
+	<tx:annotation-driven/>
+	
+	
+	<!-- 自動重置db -->
 	<jdbc:initialize-database data-source="c3p0DataSource">
 		<jdbc:script location="classpath:db_initial_script/db-schema.sql" />
 		<jdbc:script location="classpath:db_initial_script/db-test-data.sql" />
 	</jdbc:initialize-database>
 
 </beans>
-
-
-
 
 
