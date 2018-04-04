@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ctbc</groupId>
+    <artifactId>Angular1_JPA_test</artifactId>
+    <packaging>war</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Servlet 3 Web Application</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java-version>1.8</java-version>
+        <hibrenate-version>5.2.13.Final</hibrenate-version>
+        <spring-version>5.0.4.RELEASE</spring-version>
+    </properties>
+
+    <dependencies>
+        <!-- Servlet 3.0 API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+		<!-- JUNIT -->
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>4.12</version>
+		    <scope>test</scope>
+		</dependency>
+        
+        <!-- SPRING-TEST -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>${spring-version}</version>
+		    <scope>test</scope>
+		</dependency>
+        
+        <!-- SPRING-CONTEXT -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context</artifactId>
+		    <version>${spring-version}</version>
+		</dependency>
+        
+        <!-- SPRING-WEBMVC -->
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.springframework</groupId> -->
+<!-- 		    <artifactId>spring-webmvc</artifactId> -->
+<!-- 		    <version>${spring-version}</version> -->
+<!-- 		</dependency> -->
+        
+        <!-- SPRING-ORM -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-orm</artifactId>
+		    <version>${spring-version}</version>
+		</dependency>
+        
+        <!-- SPRING-JDBC -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-jdbc</artifactId>
+		    <version>${spring-version}</version>
+		</dependency>
+        
+        <!-- HIBERNATE-JPA-2.1-API -->
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.hibernate.javax.persistence</groupId> -->
+<!-- 		    <artifactId>hibernate-jpa-2.1-api</artifactId> -->
+<!-- 		    <version>1.0.0.Final</version> -->
+<!-- 		</dependency> -->
+        
+        <!-- HIBERNATE-CORE -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>${hibrenate-version}</version>
+		</dependency>
+		
+        <!-- HIBERNATE-C3P0 -->
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.hibernate</groupId> -->
+<!-- 		    <artifactId>hibernate-c3p0</artifactId> -->
+<!-- 		    <version>${hibrenate-version}</version> -->
+<!-- 		</dependency> -->
+        
+		<!-- MSSQL-JDBC -->
+		<dependency>
+		    <groupId>com.microsoft.sqlserver</groupId>
+		    <artifactId>mssql-jdbc</artifactId>
+		    <version>6.2.2.jre8</version>
+		</dependency>
+        
+        <!-- COMMONS-LANG3 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.4</version>
+		</dependency>
+        
+        <!-- LOG4J -->
+		<dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>1.2.17</version>
+		</dependency>
+        
+        
+    </dependencies>
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
