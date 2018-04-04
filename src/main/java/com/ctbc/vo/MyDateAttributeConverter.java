@@ -8,13 +8,13 @@ public class MyDateAttributeConverter implements AttributeConverter<java.sql.Dat
 
 	@Override
 	public String convertToDatabaseColumn(java.sql.Date attribute) {
-		System.out.println("MyDateAttributeConverter , attribute >>> " + attribute);
+//		System.out.println("MyDateAttributeConverter , attribute >>> " + attribute);
 		return attribute.toString();
 	}
 
 	@Override
 	public java.sql.Date convertToEntityAttribute(String dbData) {
-		System.out.println("MyDateAttributeConverter , dbData >>> " + dbData);		
+//		System.out.println("MyDateAttributeConverter , dbData >>> " + dbData);		
 		return java.sql.Date.valueOf(dbData);
 	}
 

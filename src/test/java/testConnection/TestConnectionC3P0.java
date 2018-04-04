@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ctbc.dao.DeptDAO;
 import com.ctbc.vo.DeptVO;
 import com.ctbc.vo.EmpVO;
 
@@ -45,6 +47,9 @@ public class TestConnectionC3P0 {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private DeptDAO deptDAO;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -112,17 +117,12 @@ public class TestConnectionC3P0 {
 	}
 	
 	@Test
-//	@Ignore
+	@Ignore
 	@Transactional
 	public void test_005() {
 		Session currentSession = sessionFactory.getCurrentSession();
-		try {
-			EmpVO empVO = currentSession.get(EmpVO.class, 7001);
-			System.out.println("empVO = " + empVO);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		EmpVO empVO = currentSession.get(EmpVO.class, 7001);
+		System.out.println("empVO = " + empVO);
 	}
 
 	@Test
@@ -152,16 +152,46 @@ public class TestConnectionC3P0 {
 			System.out.println(vo);
 		}
 	}
-
+	
+	
 	@Test
 	@Ignore
 	@Transactional
 	public void test_008() {
 		Session currentSession = sessionFactory.getCurrentSession();
-		Query<EmpVO> query = currentSession.createNamedQuery("EmpVO.findAll", EmpVO.class);
-		List<EmpVO> empList = query.getResultList();
-		for (EmpVO vo : empList) {
-			System.out.println(vo + " ===>>> " + vo.getDeptVO().getDname());
+		Query<DeptVO> query = currentSession.createNamedQuery("DeptVO.findAll", DeptVO.class);
+		List<DeptVO> deptList = query.getResultList();
+		for (DeptVO vo : deptList) {
+			System.out.println(vo);
+		}
+	}
+
+	@Test // 參考網站：http://www.importnew.com/20303.html
+//	@Ignore
+	@Transactional
+	public void test_009() throws InterruptedException {
+		System.err.println(">>>>>>>>>>>>>>>>>> 第一次呼叫 <<<<<<<<<<<<<<<<<");
+		List<DeptVO> dList = deptDAO.getAll(true);
+//		printDeptAndEmp(dList);
+		
+		Thread.sleep(2000);
+		System.err.println(">>>>>>>>>>>>>>>>>> 再過2秒後呼叫 <<<<<<<<<<<<<<<<<");// 可看到在2秒後並沒有再去查一次DB，Catche生效！
+		deptDAO.getAll(true);
+		printDeptAndEmp(dList);
+		
+//		Thread.sleep(11000);
+//		System.err.println(">>>>>>>>>>>>>>>>>> 再過11秒後呼叫 <<<<<<<<<<<<<<<<<");
+//		deptDAO.getAll(true);
+	}
+	
+	
+	private static void printDeptAndEmp(List<DeptVO> dList) {
+		for (DeptVO deptVO : dList) {
+			System.out.println(deptVO);
+			Set<EmpVO> empSet = deptVO.getEmpVOs();
+			for (EmpVO empVO : empSet) {
+				System.out.println(" >>> " + empVO);
+			}
 		}
 	}
 }

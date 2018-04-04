@@ -17,6 +17,7 @@
         <sqlite-version>3.8.11.2</sqlite-version>
         <sqlite-dialect-ver>1.0</sqlite-dialect-ver>
         <log4j-version>1.2.17</log4j-version>
+        <ehCache-version>2.10.2.2.21</ehCache-version>
     </properties>
 
     <dependencies>
@@ -119,6 +120,20 @@
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
 		    <version>3.7</version>
+		</dependency>
+        
+        <!-- NET.SF.EHCACHE -->
+		<dependency>
+		    <groupId>net.sf.ehcache</groupId>
+		    <artifactId>ehcache</artifactId>
+		    <version>${ehCache-version}</version>
+		</dependency>
+        
+        <!-- SPRING-CONTEXT-SUPPORT , 含有Spring對於缓存功能的抽象封装接口 -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>${spring-version}</version>
 		</dependency>
         
         

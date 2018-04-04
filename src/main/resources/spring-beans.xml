@@ -5,7 +5,9 @@
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
@@ -68,15 +70,35 @@
 	/> 
 		
 	
+	<!-- 啟用【@Transaction】-->
 	<tx:annotation-driven/>
 	
+	<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 	
+	<!-- Ehcache 實現 -->  
+	<bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" scope="singleton">
+		<property name="configLocation" value="classpath:ehcache.xml"/>
+	</bean>
+	
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">  
+	    <property name="cacheManager" ref="ehCacheManagerFactory"/>  
+	</bean>  
+	
+	<!-- 啟用【啟用 Spring 對基於注解的 Cache 的支持】-->
+	<!-- https://jax-work-archive.blogspot.tw/2015/04/spring-cache-ehcache.html -->
+	<!-- https://www.cnblogs.com/jingmoxukong/p/5975994.html -->
+	<cache:annotation-driven cache-manager="ehCacheManager"/>
+	<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+	
+	<context:component-scan base-package="com.ctbc.dao.**"/>
+	
+	<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 	<!-- 自動重置db -->
 	<jdbc:initialize-database data-source="c3p0DataSource">
 		<jdbc:script location="classpath:db_initial_script/db-schema.sql" />
 		<jdbc:script location="classpath:db_initial_script/db-test-data.sql" />
 	</jdbc:initialize-database>
-
+	<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 </beans>
 
 
