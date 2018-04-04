@@ -1,3 +1,6 @@
+### Sqlite File
+*.db
+
 ### Java template
 *.class
 
