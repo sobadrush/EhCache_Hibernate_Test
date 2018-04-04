@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java-version>1.8</java-version>
         <hibrenate-version>5.2.13.Final</hibrenate-version>
+        <hibrenate-jpa-version>1.0.0.Final</hibrenate-jpa-version>
         <spring-version>5.0.4.RELEASE</spring-version>
         <sqlite-version>3.8.11.2</sqlite-version>
         <sqlite-dialect-ver>1.0</sqlite-dialect-ver>
@@ -72,11 +73,11 @@
 		</dependency>
         
         <!-- HIBERNATE-JPA-2.1-API -->
-<!-- 		<dependency> -->
-<!-- 		    <groupId>org.hibernate.javax.persistence</groupId> -->
-<!-- 		    <artifactId>hibernate-jpa-2.1-api</artifactId> -->
-<!-- 		    <version>1.0.0.Final</version> -->
-<!-- 		</dependency> -->
+		<dependency>
+		    <groupId>org.hibernate.javax.persistence</groupId>
+		    <artifactId>hibernate-jpa-2.1-api</artifactId>
+		    <version>${hibrenate-jpa-version}</version>
+		</dependency>
         
         <!-- HIBERNATE-CORE -->
 		<dependency>
@@ -112,6 +113,14 @@
 		    <artifactId>log4j</artifactId>
 		    <version>${log4j-version}</version>
 		</dependency>
+        
+        <!-- COMMONS-LANG3 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.7</version>
+		</dependency>
+        
         
     </dependencies>
     <build>

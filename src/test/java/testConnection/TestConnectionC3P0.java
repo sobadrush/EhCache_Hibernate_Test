@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -12,6 +14,8 @@ import javax.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,6 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ctbc.vo.DeptVO;
+import com.ctbc.vo.EmpVO;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @ContextConfiguration(locations = "classpath:spring-beans.xml")
@@ -37,7 +44,7 @@ public class TestConnectionC3P0 {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -83,8 +90,9 @@ public class TestConnectionC3P0 {
 		Session currentSession = sessionFactory.getCurrentSession();
 		System.out.println("currentSession = " + currentSession);
 	}
-	
+
 	@Test
+	@Ignore
 //	@Rollback(value = false) // 預設都會Rollback
 	@Transactional
 	public void test_003() {
@@ -93,6 +101,67 @@ public class TestConnectionC3P0 {
 		NativeQuery query = currentSession.createNativeQuery("DELETE FROM z40180_deptTB WHERE deptno IN ( 10 , 20 ) ");
 		query.executeUpdate();
 	}
+
+	@Test
+	@Ignore
+	@Transactional
+	public void test_004() {
+		Session currentSession = sessionFactory.getCurrentSession();
+		DeptVO deptvo = currentSession.get(DeptVO.class, 10);
+		System.out.println("deptvo = " + deptvo);
+	}
+	
+	@Test
+//	@Ignore
+	@Transactional
+	public void test_005() {
+		Session currentSession = sessionFactory.getCurrentSession();
+		try {
+			EmpVO empVO = currentSession.get(EmpVO.class, 7001);
+			System.out.println("empVO = " + empVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	@Ignore
+	@Transactional
+	public void test_006() {
+		// 	empVO.setEmpHireDate(java.sql.Date.valueOf(rs.getString("hiredate")));
+		String sql = " SELECT ee.*, dd.dname FROM z40180_empTB AS ee JOIN z40180_deptTB AS dd " +
+					" ON ee.deptno = dd.deptno " +
+					" WHERE ee.empno IN ( 7003 , 7004 , 7005 ) ";
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query query = currentSession.createNativeQuery(sql).setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+		List<Map<String, Object>> list = query.getResultList();
+		for (Map<String, Object> hmap : list) {
+			System.out.println(hmap);
+		}
+	}
+
+	@Test
+	@Ignore
+	@Transactional
+	public void test_007() {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query<DeptVO> query = currentSession.createNamedQuery("DeptVO.findAll", DeptVO.class);
+		List<DeptVO> deptList = query.getResultList();
+		for (DeptVO vo : deptList) {
+			System.out.println(vo);
+		}
+	}
+
+	@Test
+	@Ignore
+	@Transactional
+	public void test_008() {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query<EmpVO> query = currentSession.createNamedQuery("EmpVO.findAll", EmpVO.class);
+		List<EmpVO> empList = query.getResultList();
+		for (EmpVO vo : empList) {
+			System.out.println(vo + " ===>>> " + vo.getDeptVO().getDname());
+		}
+	}
 }
-
-

@@ -14,7 +14,8 @@ CREATE TABLE z40180_empTB
     empno	 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	ename	 varchar(14) CHECK( LENGTH(ename) <= 14 ) ,
 	job		 varchar(13) CHECK( LENGTH(job) <= 13 ),
-	hiredate  date,
+	hiredate  TEXT,
+--	hiredate  date,
 	deptno int not NULL,
 	FOREIGN KEY(deptno) REFERENCES z40180_deptTB(deptno)
 	--Hibernate 做關聯查詢其實可以不用在實體表格設定foreign-key

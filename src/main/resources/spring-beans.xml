@@ -16,8 +16,7 @@
 	<bean id="c3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="org.sqlite.JDBC" />
-		<property name="jdbcUrl"
-			value="jdbc:sqlite:#{systemProperties['user.dir']}/mySqlLiteDB.db" />
+		<property name="jdbcUrl" value="jdbc:sqlite:#{systemProperties['user.dir']}/mySqlLiteDB.db" />
 		<!-- <property name="user" value="${jdbc.username}" /> -->
 		<!-- <property name="password" value="${jdbc.password}" /> -->
 
@@ -51,13 +50,13 @@
 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" scope="singleton">
 		<property name="dataSource" ref="c3p0DataSource"/>
-<!-- 		<property name="packagesToScan" value=""/> -->
+		<property name="packagesToScan" value="com.ctbc.vo.**"/>
 		<property name="hibernateProperties">
 			<props>  
 	            <prop key="hibernate.dialect">org.hibernate.dialect.SQLiteDialect</prop>  
 	            <prop key="hibernate.show_sql">true</prop>  
 	            <prop key="hibernate.format_sql">true</prop>  
-	            <prop key="hibernate.use_sql_comments">true</prop>  
+	            <prop key="hibernate.use_sql_comments">false</prop>  
 	            <prop key="hibernate.cache.use_second_level_cache">false</prop>
 	        </props>  
 		</property>
