@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -166,32 +165,33 @@ public class TestConnectionC3P0 {
 		}
 	}
 
+	/**
+	 * 可開關 DeptDAO中的 @Cacheable 註解測試，觀察SQL發送狀況 
+	 */
 	@Test // 參考網站：http://www.importnew.com/20303.html
 //	@Ignore
 	@Transactional
 	public void test_009() throws InterruptedException {
 		System.err.println(">>>>>>>>>>>>>>>>>> 第一次呼叫 <<<<<<<<<<<<<<<<<");
-		List<DeptVO> dList = deptDAO.getAll(true);
-//		printDeptAndEmp(dList);
+		printDeptAndEmp(deptDAO.getAll(false));
 		
 		Thread.sleep(2000);
 		System.err.println(">>>>>>>>>>>>>>>>>> 再過2秒後呼叫 <<<<<<<<<<<<<<<<<");// 可看到在2秒後並沒有再去查一次DB，Catche生效！
-		deptDAO.getAll(true);
-		printDeptAndEmp(dList);
+		printDeptAndEmp(deptDAO.getAll(false));
 		
-//		Thread.sleep(11000);
-//		System.err.println(">>>>>>>>>>>>>>>>>> 再過11秒後呼叫 <<<<<<<<<<<<<<<<<");
-//		deptDAO.getAll(true);
+		Thread.sleep(11000);
+		System.err.println(">>>>>>>>>>>>>>>>>> 再過11秒後呼叫 <<<<<<<<<<<<<<<<<");// 11秒後由於以大於快取時間，SQL會再發送！
+		printDeptAndEmp(deptDAO.getAll(false));
 	}
 	
 	
 	private static void printDeptAndEmp(List<DeptVO> dList) {
 		for (DeptVO deptVO : dList) {
 			System.out.println(deptVO);
-			Set<EmpVO> empSet = deptVO.getEmpVOs();
-			for (EmpVO empVO : empSet) {
-				System.out.println(" >>> " + empVO);
-			}
+//			Set<EmpVO> empSet = deptVO.getEmpVOs();
+//			for (EmpVO empVO : empSet) {
+//				System.out.println(" >>> " + empVO);
+//			}
 		}
 	}
 }
